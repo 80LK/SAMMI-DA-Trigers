@@ -48,35 +48,35 @@ function buildExtension({
 	const stream = createWriteStream(path);
 
 	//Write Name
-	stream.write("[extension_name]\n");
-	stream.write(name + "\n");
+	stream.write("[extension_name]\r\n");
+	stream.write(name + "\r\n");
 
 	//Write Description
-	stream.write("[extension_info]\n");
-	if (description) stream.write(description + "\n");
+	stream.write("[extension_info]\r\n");
+	if (description) stream.write(description + "\r\n");
 
 	//Write version
-	stream.write("[extension_version]\n");
-	stream.write(version + "\n");
+	stream.write("[extension_version]\r\n");
+	stream.write(version + "\r\n");
 
 	//Write bridge panel
-	stream.write("[insert_external]\n");
+	stream.write("[insert_external]\r\n");
 	if (panel) stream.write(readFileSync(panel));
 
 	//Write commands
-	stream.write("[insert_command]\n");
+	stream.write("[insert_command]\r\n");
 	if (command) stream.write(readFileSync(command));
 
 
 	//Write hooks
-	stream.write("[insert_hook]\n");
+	stream.write("[insert_hook]\r\n");
 
 	//Write script
-	stream.write("[insert_script]\n");
+	stream.write("[insert_script]\r\n");
 	if (script) stream.write(readFileSync(script));
 
 	//Write deck panel
-	stream.write("[insert_over]\n");
+	stream.write("[insert_over]\r\n");
 	if (deck) stream.write(readFileSync(deck));
 
 	stream.end();

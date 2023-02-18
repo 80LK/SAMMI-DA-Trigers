@@ -1,0 +1,14 @@
+{
+  "name": "sammi-da-trigers",
+  "version": "1.0.0",
+  "description": "DonationAlerts Triggers for SAMMI",
+  "scripts": {
+    "build": "node ./builder.js"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^18.14.0",
+    "typescript": "^4.9.5"
+  }
+}

@@ -1,0 +1,12 @@
+{
+	"typescript": {
+		"command": "src/command",
+		"script": "src/script"
+	},
+	"name": "DA Triggers",
+	"deck": "assets/deck.json",
+	"script": "dist/insert_script.js",
+	"command": "dist/insert_command.js",
+	"panel": "assets/panel.htm",
+	"outDir": "dist"
+}

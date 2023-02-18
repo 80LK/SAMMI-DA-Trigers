@@ -1,0 +1,42 @@
+<div id="loading_label">Загрузка...</div>
+<div id="settings_form" hidden>
+	<h2>Настройки</h2>
+	<table border="0">
+		<tr>
+			<td> DonationAlerts токен </td>
+			<td> <input id="token" placeholder="DonationAlerts токен" type="password"> </td>
+			<td> <button id="toggle_visible_token">Показать</button> </td>
+		</tr>
+		<tr>
+			<td></td>
+			<td>
+				<a href="https://www.donationalerts.com/dashboard/general-settings/account" target="_blank"
+					style="font-size:.8em;">
+					Вставьте сюда секретный токен
+				</a>
+			</td>
+		</tr>
+		<tr>
+			<td> Имя триггера </td>
+			<td> <input id="trigger_name" placeholder="Имя триггера"> </td>
+		</tr>
+		<tr>
+			<td> Хост сокета </td>
+			<td> <input id="socket_host" placeholder="URL сокета"> </td>
+		</tr>
+	</table>
+	<button id="save_settings">Сохранить</button>
+
+	<h2>Тест</h2>
+	<table border="0">
+		<tr>
+			<td> Размер доната </td>
+			<td> <input id="amount_test_tip" placeholder="Размер доната"> </td>
+		</tr>
+	</table>
+	<button id="send_test_tip">Отправить</button>
+	<p>
+		Тестовое оповещение так же можно сделать через
+		<a href="https://www.donationalerts.com/dashboard/widgets/alerts" target="_blank">DonationAlerts</a>.
+	</p>
+</div>

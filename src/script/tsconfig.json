@@ -1,0 +1,10 @@
+{
+	"compilerOptions": {
+		// "target": "ES5",
+		"rootDir": "./",
+		"removeComments": true,
+		"outFile": "../../dist/insert_script.js",
+		"esModuleInterop": true,
+		"declaration": true,
+	}
+}

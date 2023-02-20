@@ -5,6 +5,7 @@ interface Donation {
 	username: string;
 	message: string;
 	currency: string;
+	billing_system: string;
 	amount: number;
 }
 
@@ -25,9 +26,11 @@ class Socket {
 			console.log(`Сокет подключился к ${this.settings.socketHost}`);
 			this.socket.emit('add-user', { token: this.settings.token, type: 'alert_widget' });
 		})
-		this.ondonation
+
 		this.socket.on('donation', (msg: string) => {
 			const don: Donation = JSON.parse(msg);
+			if (don.billing_system.toLowerCase() == "twitch")
+				return;
 
 			console.log(`Получен донат`, don);
 			this.ondonation(don);

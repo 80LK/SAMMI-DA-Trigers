@@ -1,6 +1,7 @@
 const { execSync } = require("child_process");
 const { readFileSync, createWriteStream, createReadStream } = require('fs');
 const { resolve } = require("path");
+const nunjucks = require('nunjucks');
 
 function exec(cmd) {
 	return execSync(cmd, [], {
@@ -33,39 +34,34 @@ function buildTypescript(typescriptFiles) {
 	return success;
 }
 
-function buildExtension({
-	name,
-	description,
-	version,
-	deck,
-	script,
-	command,
-	panel,
-	outDir
-}) {
+function buildExtension(cfg) {
 	console.log("Build extension")
-	const path = resolve(process.cwd(), `${outDir}/${name}.sef`);
+	const path = resolve(process.cwd(), `${cfg.outDir}/${cfg.name}.sef`);
 	const stream = createWriteStream(path);
 
 	//Write Name
 	stream.write("[extension_name]\r\n");
-	stream.write(name + "\r\n");
+	stream.write(cfg.name + "\r\n");
 
 	//Write Description
 	stream.write("[extension_info]\r\n");
-	if (description) stream.write(description + "\r\n");
+	if (cfg.description) stream.write(cfg.description + "\r\n");
 
 	//Write version
 	stream.write("[extension_version]\r\n");
-	stream.write(version + "\r\n");
+	stream.write(cfg.version + "\r\n");
 
 	//Write bridge panel
 	stream.write("[insert_external]\r\n");
-	if (panel) stream.write(readFileSync(panel));
+	if (cfg.panel) {
+		// console.log("render",);
+		stream.write(nunjucks.render(cfg.panel, cfg));
+		// stream.write(readFileSync(cfg.panel));
+	}
 
 	//Write commands
 	stream.write("[insert_command]\r\n");
-	if (command) stream.write(readFileSync(command));
+	if (cfg.command) stream.write(readFileSync(cfg.command));
 
 
 	//Write hooks
@@ -73,11 +69,11 @@ function buildExtension({
 
 	//Write script
 	stream.write("[insert_script]\r\n");
-	if (script) stream.write(readFileSync(script));
+	if (cfg.script) stream.write(readFileSync(cfg.script));
 
 	//Write deck panel
 	stream.write("[insert_over]\r\n");
-	if (deck) stream.write(readFileSync(deck));
+	if (cfg.deck) stream.write(readFileSync(cfg.deck));
 
 	stream.end();
 	console.log(`Extension builded: "${path}"`);
@@ -95,11 +91,7 @@ function main() {
 	const buildOptions = Object.assign({
 		name: "SAMMI Extension",
 		version: "0.0.1",
-	}, {
-		version: package.version,
-		description: package.description,
-		name: package.name,
-	}, cfg);
+	}, package, cfg);
 
 	buildExtension(buildOptions)
 }

@@ -23,7 +23,7 @@ class Socket {
 
 		this.socket = io(`wss://${this.settings.socketHost}/`);
 		this.socket.on('connect', (msg) => {
-			console.log(`Сокет подключился к ${this.settings.socketHost}`);
+			console.log(`Сокет подключился к ${this.settings.socketHost}`, msg);
 			this.socket.emit('add-user', { token: this.settings.token, type: 'alert_widget' });
 		})
 

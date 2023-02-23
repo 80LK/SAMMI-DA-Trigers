@@ -33,6 +33,31 @@
 				</a>
 			</td>
 		</tr>
+		<tr>
+			<td colspan="3">
+				<label>
+					<input id="enableConvertCurreny" type="checkbox" />
+					Включить конвертацию валют
+				</label>
+			</td>
+		</tr>
+		<tr id="fieldConvertCurrenyTo" hidden>
+			<td> Конвертация в </td>
+			<td colspan="2">
+				<select id="convertCurrenyTo">
+					<option value="EUR">Евро (EUR)</option>
+					<option value="USD">Доллар (USD)</option>
+					<option value="RUB">Рубль (RUB)</option>
+					<option value="BYN">Белорусский рубль (BYN)</option>
+					<option value="KZT">Казахстанский тенге (KZT)</option>
+					<option value="UAH">Украинская гривна (UAH)</option>
+					<option value="BRL">Бразильский реал (BRL)</option>
+					<option value="TRY">Турецкая лира (TRY)</option>
+					<option value="PLN">Польский злотый (PLN)</option>
+				</select>
+			</td>
+		</tr>
+
 	</table>
 	<button id="save_settings">Сохранить</button>
 
@@ -50,7 +75,7 @@
 	</p>
 	<h3>О расширении</h3>
 	<p>
-		{{ name }} <br/>
+		{{ name }} <br />
 		Версия: {{ version }} <br />
 		<a href="{{ repository }}" target="_blank">GitHub</a>
 	</p>

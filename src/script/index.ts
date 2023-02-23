@@ -3,14 +3,21 @@
 /// <reference path="../../declaration/SAMMI.d.ts" />
 
 
-function DonationAlertsTriggerInit() {
+async function DonationAlertsTriggerInit() {
 	const settings = new Settings(localStorage),
 		socket = new Socket(settings),
 
 		$inToken = <HTMLInputElement>document.getElementById('token'),
 		$btnTokenVisible = <HTMLButtonElement>document.getElementById('toggle_visible_token'),
+
 		$inTriggerName = <HTMLInputElement>document.getElementById('trigger_name'),
 		$inSocketHost = <HTMLInputElement>document.getElementById('socket_host'),
+
+		$chbEnableConvertCurrency = <HTMLInputElement>document.getElementById('enableConvertCurreny'),
+		$fieldConvertCurrenyTo = <HTMLTableRowElement>document.getElementById('fieldConvertCurrenyTo'),
+		$selConvertCurrenyTo = <HTMLSelectElement>document.getElementById('convertCurrenyTo'),
+
+
 		$btnSave = <HTMLButtonElement>document.getElementById('save_settings'),
 
 		$inAmountTestTip = <HTMLInputElement>document.getElementById("amount_test_tip"),
@@ -21,6 +28,9 @@ function DonationAlertsTriggerInit() {
 
 	socket.ondonation = (don) => PushTip(don.username, don.amount, don.currency, don.message, settings.triggerName);
 
+	$chbEnableConvertCurrency.addEventListener('change', () => {
+		$fieldConvertCurrenyTo.hidden = !$chbEnableConvertCurrency.checked;
+	})
 
 
 	function getCurrncySymbol(tipCurrency: string) {
@@ -42,21 +52,65 @@ function DonationAlertsTriggerInit() {
 		return tipCurrency;
 	}
 
+	const currency = await (async () => {
+		try {
+			const request = await fetch('https://www.cbr-xml-daily.ru/latest.js');
+			const response = await request.json();
+			response.rates.RUB = 1;
+			return response.rates
+		} catch (e) {
+			if (settings.enableConvertCurency) {
+				alert("Не удалось получить курс валют. Конвертация отключена");
+				settings.enableConvertCurency = false;
+			}
+			return { noConv: 1 };
+		}
+	})();
+	console.log(currency);
+	function convert(amount: number, from: string, to: string): number {
+		if (currency.noConv === 1) return amount;
+
+		from = from.toUpperCase(),
+			to = to.toUpperCase();
+
+		if (from == to) return amount;
+
+		if (!currency.hasOwnProperty(from)) {
+			console.error(`Unknown currency "${from}"`)
+			return amount;
+		}
+		if (!currency.hasOwnProperty(to)) {
+			console.error(`Unknown currency "${to}"`)
+			return amount;
+		}
+
+		return (amount / currency[from]) * currency[to];
+	}
+
 	function PushTip(username: string, tipAmount: number, tipCurrency: string, message: string, triggerName: string) {
 		let tipCurrencySymbol = getCurrncySymbol(tipCurrency);
 
 
 		SAMMI.alert(`DA Extenstion Trigger: ${triggerName}`);
 
-		console.log('trigger', triggerName)
+		console.log('trigger', triggerName, (settings.enableConvertCurency ? {
+			tipConvertAmount: convert(tipAmount, tipCurrency, settings.convertCurrencyTo),
+			tipConvertCurrency: settings.convertCurrencyTo,
+			tipConvertCurrencySymbol: getCurrncySymbol(settings.convertCurrencyTo)
+		} : {}))
 		SAMMI.triggerExt(triggerName, {
 			"tipData": {
 				"username": username,
 				"tipAmount": tipAmount,
 				"tipAmountString": tipAmount.toString(),
 				"tipCurrency": tipCurrency,
-				"tipCurrencySymbol": tipCurrencySymbol,
-				"userMessage": message
+				"tipCurrencySymbol": getCurrncySymbol(tipCurrencySymbol),
+				"userMessage": message,
+				... (settings.enableConvertCurency ? {
+					tipConvertAmount: convert(tipAmount, tipCurrency, settings.convertCurrencyTo),
+					tipConvertCurrency: settings.convertCurrencyTo,
+					tipConvertCurrencySymbol: getCurrncySymbol(settings.convertCurrencyTo)
+				} : {})
 			}
 		})
 	}
@@ -83,6 +137,8 @@ function DonationAlertsTriggerInit() {
 		settings.token = token;
 		settings.triggerName = triggerName;
 		settings.socketHost = socketHost;
+		settings.enableConvertCurency = $chbEnableConvertCurrency.checked;
+		settings.convertCurrencyTo = $selConvertCurrenyTo.value;
 		settings.save();
 		alert("Настройки сохранены");
 		socket.connect();
@@ -103,7 +159,8 @@ function DonationAlertsTriggerInit() {
 	settings.token && ($inToken.value = settings.token);
 	$inTriggerName.value = settings.triggerName;
 	settings.socketHost && ($inSocketHost.value = settings.socketHost);
-
+	$fieldConvertCurrenyTo.hidden = !($chbEnableConvertCurrency.checked = settings.enableConvertCurency);
+	$selConvertCurrenyTo.value = settings.convertCurrencyTo;
 
 	//Switch label
 	$loading.hidden = true;
@@ -113,33 +170,3 @@ function DonationAlertsTriggerInit() {
 	if (settings.token && settings.socketHost)
 		socket.connect();
 }
-
-
-
-
-// function connectSocket(token, triggerName, socketURL) {
-// 	if (da_socket) {
-// 		da_socket.disconnect();
-// 		da_socket = null;
-// 	}
-
-// 	socketURL = socketURL || deafultHostSocket;
-	// da_socket = io(`wss://${socketURL}/`);
-// 	da_socket.on('connect', (msg) => {
-// 		console.log(`Сокет подключился к ${socketURL}`);
-// 		da_socket.emit('add-user', { token: token, type: 'alert_widget' });
-// 	})
-// 	da_socket.on('donation', function (msg) {
-// 		const don = JSON.parse(msg);
-
-// 		console.log(`Получен донат`, don);
-
-// 		DAPushTip(
-// 			don.username || '',
-// 			don.amount || 0,
-// 			don.currency || 'undefined',
-// 			don.message || '',
-// 			triggerName
-// 		);
-// 	});
-// }

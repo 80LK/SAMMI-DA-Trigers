@@ -15,6 +15,7 @@ async function DonationAlertsTriggerInit() {
 
 		$chbEnableConvertCurrency = <HTMLInputElement>document.getElementById('enableConvertCurreny'),
 		$fieldConvertCurrenyTo = <HTMLTableRowElement>document.getElementById('fieldConvertCurrenyTo'),
+		$convertCurrencyCredits = <HTMLTableRowElement>document.getElementById('convertCurrencyCredits'),
 		$selConvertCurrenyTo = <HTMLSelectElement>document.getElementById('convertCurrenyTo'),
 
 
@@ -29,7 +30,7 @@ async function DonationAlertsTriggerInit() {
 	socket.ondonation = (don) => PushTip(don.username, don.amount, don.currency, don.message, settings.triggerName);
 
 	$chbEnableConvertCurrency.addEventListener('change', () => {
-		$fieldConvertCurrenyTo.hidden = !$chbEnableConvertCurrency.checked;
+		$convertCurrencyCredits.hidden = $fieldConvertCurrenyTo.hidden = !$chbEnableConvertCurrency.checked;
 	})
 
 
@@ -92,12 +93,10 @@ async function DonationAlertsTriggerInit() {
 
 
 		SAMMI.alert(`DA Extenstion Trigger: ${triggerName}`);
+		const tipConvertAmount = convert(tipAmount, tipCurrency, settings.convertCurrencyTo);
 
-		console.log('trigger', triggerName, (settings.enableConvertCurency ? {
-			tipConvertAmount: convert(tipAmount, tipCurrency, settings.convertCurrencyTo),
-			tipConvertCurrency: settings.convertCurrencyTo,
-			tipConvertCurrencySymbol: getCurrncySymbol(settings.convertCurrencyTo)
-		} : {}))
+		console.log('trigger', triggerName)
+
 		SAMMI.triggerExt(triggerName, {
 			"tipData": {
 				"username": username,
@@ -107,7 +106,8 @@ async function DonationAlertsTriggerInit() {
 				"tipCurrencySymbol": getCurrncySymbol(tipCurrencySymbol),
 				"userMessage": message,
 				... (settings.enableConvertCurency ? {
-					tipConvertAmount: convert(tipAmount, tipCurrency, settings.convertCurrencyTo),
+					tipConvertAmount: tipConvertAmount,
+					tipConvertAmountString: tipConvertAmount.toString(),
 					tipConvertCurrency: settings.convertCurrencyTo,
 					tipConvertCurrencySymbol: getCurrncySymbol(settings.convertCurrencyTo)
 				} : {})
@@ -159,7 +159,7 @@ async function DonationAlertsTriggerInit() {
 	settings.token && ($inToken.value = settings.token);
 	$inTriggerName.value = settings.triggerName;
 	settings.socketHost && ($inSocketHost.value = settings.socketHost);
-	$fieldConvertCurrenyTo.hidden = !($chbEnableConvertCurrency.checked = settings.enableConvertCurency);
+	$convertCurrencyCredits.hidden = $fieldConvertCurrenyTo.hidden = !($chbEnableConvertCurrency.checked = settings.enableConvertCurency);
 	$selConvertCurrenyTo.value = settings.convertCurrencyTo;
 
 	//Switch label

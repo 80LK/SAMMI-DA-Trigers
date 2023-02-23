@@ -13,3 +13,6 @@ SAMMI-Расширение, добавляющий тригер донатов �
 ![Open Network](/img/get-host-3.jpg "Open Network")
 4. Нажмите F5 и найдите сокет DonationAlerts (Request URL содержит donationalerts.ru). Хост сокета указал в группе "Request Heaeders" в поле "Host".
 ![Find Socket and get Host](/img/get-host-4.jpg "Find Socket and get Host")
+
+## Используется
+* [Курсы валют, API](https://www.cbr-xml-daily.ru)

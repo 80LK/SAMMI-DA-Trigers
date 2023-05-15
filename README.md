@@ -5,6 +5,18 @@ SAMMI-Расширение, добавляющий тригер донатов �
 
 ## Как узнать свой хост сокета
 
+### DA-GSA
+
+1. Скачайте [DA-GSA](https://github.com/80LK/DA-GSA/releases/download/1.0/da-gsa.exe)
+2. Перейдите в [настройки профиля](https://www.donationalerts.com/dashboard/general-settings/account) и скопируйте секретный токен.
+![Get token](./img/da-gsa-1.png "Get token")
+3. Запустите DA-GSA и вставтье туда свой токен. Нажмите `Enter`.
+![Put token](./img/da-gsa-2.png "Put token")
+
+[GitHub DA-GAS](https://github.com/80LK/DA-GSA)
+
+### Альтернативный вариант
+
 1. Запустите любую группу [виджетов](https://www.donationalerts.com/dashboard/widgets/alerts).
 ![Run widget](/img/get-host-1.jpg "Run widget")
 2. В открывшемся окне запустите DevTools(F12, Ctrl+Shift+I или ПКМ -> "Посмотреть код")

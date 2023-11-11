@@ -1,4 +1,5 @@
 /// <reference path="./Settings.ts" />
+/// <reference path="./Settings.ts" />
 /// <reference path="../../declaration/socket.io.d.ts" />
 
 interface Donation {
@@ -21,7 +22,7 @@ class Socket {
 		if (!this.settings.token || !this.settings.socketHost)
 			return;
 
-		this.socket = io(`wss://${this.settings.socketHost}/`);
+		this.socket = sio_2(`wss://${this.settings.socketHost}/`);
 		this.socket.on('connect', (msg) => {
 			console.log(`Сокет подключился к ${this.settings.socketHost}`, msg);
 			this.socket.emit('add-user', { token: this.settings.token, type: 'alert_widget' });

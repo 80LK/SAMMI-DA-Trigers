@@ -1,9 +1,12 @@
 /// <reference path="./Settings.ts" />
 /// <reference path="./Socket.ts" />
+/// <reference path="./load_socket.io.ts" />
 /// <reference path="../../declaration/SAMMI.d.ts" />
-
+var sio_2: typeof io;
 
 async function DonationAlertsTriggerInit() {
+	sio_2 = await load_socketio();
+
 	const settings = new Settings(localStorage),
 		socket = new Socket(settings),
 
@@ -67,7 +70,6 @@ async function DonationAlertsTriggerInit() {
 			return { noConv: 1 };
 		}
 	})();
-	console.log(currency);
 	function convert(amount: number, from: string, to: string): number {
 		if (currency.noConv === 1) return amount;
 

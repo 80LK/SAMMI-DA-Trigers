@@ -12,7 +12,7 @@ class Settings {
 	public read() {
 		this.token = this.storage.getItem('token');
 		this.triggerName = this.storage.getItem('triggerName') || this.triggerName;
-		this.socketHost = this.storage.getItem('socketHost') || this.storage.getItem('socketURL') || "socket1.donationalerts.ru:443";
+		this.socketHost = this.storage.getItem('socketHost') || this.storage.getItem('socketURL') || "socket.donationalerts.ru:443";
 		this.enableConvertCurency = this.storage.getItem('enableConvertCurency') == "true" || false;
 		this.convertCurrencyTo = this.storage.getItem('convertCurrencyTo') || "RUB";
 	}

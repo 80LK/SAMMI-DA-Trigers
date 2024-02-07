@@ -21,6 +21,8 @@ async function DonationAlertsTriggerInit() {
 		$convertCurrencyCredits = <HTMLTableRowElement>document.getElementById('convertCurrencyCredits'),
 		$selConvertCurrenyTo = <HTMLSelectElement>document.getElementById('convertCurrenyTo'),
 
+		$chbEnableCustomSocketURL = <HTMLInputElement>document.getElementById('enableCustomSocketURL'),
+		$fieldCustomURL = <NodeListOf<HTMLTableRowElement>>document.querySelectorAll('#fieldCustomURL'),
 
 		$btnSave = <HTMLButtonElement>document.getElementById('save_settings'),
 
@@ -36,6 +38,10 @@ async function DonationAlertsTriggerInit() {
 		$convertCurrencyCredits.hidden = $fieldConvertCurrenyTo.hidden = !$chbEnableConvertCurrency.checked;
 	})
 
+	$chbEnableCustomSocketURL.addEventListener('change', () => {
+		localStorage.setItem("enabledCustomURL", $chbEnableCustomSocketURL.checked.toString())
+		$fieldCustomURL.forEach(e => e.hidden = !$chbEnableCustomSocketURL.checked);
+	})
 
 	function getCurrncySymbol(tipCurrency: string) {
 		switch (tipCurrency) {
@@ -163,6 +169,8 @@ async function DonationAlertsTriggerInit() {
 	settings.socketHost && ($inSocketHost.value = settings.socketHost);
 	$convertCurrencyCredits.hidden = $fieldConvertCurrenyTo.hidden = !($chbEnableConvertCurrency.checked = settings.enableConvertCurency);
 	$selConvertCurrenyTo.value = settings.convertCurrencyTo;
+	$chbEnableCustomSocketURL.checked = localStorage.getItem("enabledCustomURL") === "true";
+	$fieldCustomURL.forEach(e => e.hidden = !$chbEnableCustomSocketURL.checked);
 
 	//Switch label
 	$loading.hidden = true;
